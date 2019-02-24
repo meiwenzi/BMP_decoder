@@ -1,0 +1,68 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/questasim64_10.4e/examples
+vbmp_decoder
+Z0 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+31
+!i10b 1
+!s100 [TBUW=fRz[L8Nm<IQgan93
+IA08Dm47<79B=PK<SWeFob3
+Z1 dH:/BMP_decoder/sim
+w1550585181
+8H:/BMP_decoder/bmp_decoder.v
+FH:/BMP_decoder/bmp_decoder.v
+L0 1
+Z2 OL;L;10.4e;61
+!s108 1550987001.000000
+!s107 H:/BMP_decoder/bmp_decoder.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|H:/BMP_decoder/bmp_decoder.v|
+!i113 0
+Z3 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+vsync_sig
+!s110 1550803126
+!i10b 1
+!s100 aT9m@cW>F3H_QgE7F;VG;0
+I@nIKaljDSbURn<OJaXdmo0
+R0
+R1
+w1550803116
+8H:/DP_SINK/RTL/sync_sig.v
+FH:/DP_SINK/RTL/sync_sig.v
+L0 16
+R2
+r1
+!s85 0
+31
+!s108 1550803126.000000
+!s107 H:/DP_SINK/RTL/sync_sig.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|H:/DP_SINK/RTL/sync_sig.v|
+!i113 0
+R3
+vtb
+R0
+r1
+!s85 0
+31
+!i10b 1
+!s100 aaWX:1gCT<d>h>=maTVK31
+I2=]3D]mlB<G@amEe1>2Co3
+R1
+w1550986992
+8H:\BMP_decoder\tb.v
+FH:\BMP_decoder\tb.v
+L0 3
+R2
+!s108 1550987000.000000
+!s107 H:\BMP_decoder\tb.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|H:\BMP_decoder\tb.v|
+!i113 0
+R3

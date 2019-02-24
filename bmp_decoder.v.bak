@@ -1,0 +1,152 @@
+module bmp_decoder(
+   input clk,
+   input rst_n,
+
+   input [7:0] bmp_data,
+
+   input ready_to_decod,
+
+   output decod_done
+);
+
+reg [7:0] main_state;
+localparam IDLE          = 8'd0,
+           F_TYPE        = 8'd1,
+           F_SIZE        = 8'd2,
+           F_RESERVED1   = 8'd3,
+           F_RESERVED2   = 8'd4,
+           F_OFFSETBITMAP= 8'd5,
+           DIB_HEADER_SIZE      = 
+           DIB_BM_WIDTH     = 
+           DIB_BP_HEIGHT    = 
+           DIB_NUM_CLOCR_PLANE
+           DIB_BITS_PER_PIXEL
+           DIB_COMPRESSION
+           DIB_IMG_SIZE
+           DIB_XPIXEL_NUM_PER_METER
+           DIB_VPIXEL_NUM_PER_METER
+           DIB_NUM_COLOR_PALETTE
+           DIB_NUM_IMP_COLOR
+
+
+
+
+reg [23:0] opt_cnt;
+/*00 - 01*/reg [15:0] bmp_file_type; // BM BA CI CP IC PT
+/*02 - 05*/reg [31:0] bmp_file_size; //
+/*06 - 07*/reg [15:0] bmp_reserved1; // Reserve 
+/*08 - 09*/reg [15:0] bmp_reserved2; // Reserve 
+/*0A - 0D*/reg [31:0] bmp_bitmap_offset;
+/*0E - 11*/reg [31:0] dib_size; //Bitmap Header Size
+/*12 - 15*/reg [31:0] dib_bitmap_width; //the bitmap width in pixels (signed integer) 
+/*16 - 19*/reg [31:0] dib_bitmap_height; //the bitmap height in pixels (signed integer) 
+/*1A - 1B*/reg [15:0] dib_num_clocr_plane; //The number of color planes, must be 1 
+/*1C - 1D*/reg [15:0] dib_bits_per_pixel; // the number of bits per pixel, which is the color depth of the image. Typical values are 1, 4, 8, 16, 24 and 32.
+/*1E - 21*/reg [31:0] dib_cpmpression; //the compression method being used. See the next table for a list of possible values 
+/*22 - 25*/reg [31:0] dib_img_size; // the image size. This is the size of the raw bitmap data; a dummy 0 can be given for BI_RGB bitmaps. 
+/*26 - 29*/reg [31:0] dib_hpixel_num_per_meter; // the horizontal resolution of the image. (pixel per metre, signed integer) 
+/*2A - 2D*/reg [31:0] dib_vpixel_num_per_meter; // the vertical resolution of the image. (pixel per metre, signed integer) 
+/*2E - 31*/reg [31:0] dib_num_color_palette; //  	the number of colors in the color palette, or 0 to default to 2n
+/*32 - 35*/reg [31:0] dib_num_imp_color; // the number of important colors used, or 0 when every color is important; generally ignored 
+
+
+
+always @(posedge clk, negedge rst_n) begin 
+   if(rst_n == 1'd1) begin 
+      main_state <= IDLE;
+      bmp_file_type <= 16'd0;
+      bmp_file_size <= 32'd0;
+      bmp_reserved1 <= 16'd0;
+      bmp_reserved2 <= 16'd0;
+      bmp_bitmap_offset <= 32'd0;
+      opt_cnt       <= 24'd0;
+   end 
+   else begin 
+      case(main_state)
+         IDLE: begin 
+            if(ready_to_decod & decod_done) begin 
+               main_state <= F_TYPE;
+            end 
+
+         end 
+         F_TYPE: begin 
+            if(opt_cnt == 24'd1) begin 
+               main_state <= F_SIZE;
+               opt_cnt    <= 24'd0;
+            end 
+            else begin 
+               opt_cnt <= opt_cnt + 24'd1;
+            end 
+
+            bmp_file_type[7:0]  <= bmp_data;
+            bmp_file_type[15:8] <= bmp_file_type[7:0];
+         end 
+         F_SIZE: begin 
+            if(opt_cnt == 24'd3) begin 
+               main_state <= F_RESERVED1;
+               opt_cnt    <= 24'd0;
+            end 
+            else begin 
+               opt_cnt <= opt_cnt + 24'd1;
+            end 
+
+            bmp_file_size[7:0]  <= bmp_data;
+            bmp_file_size[31:8] <= bmp_file_size[27:0];
+         end 
+         F_RESERVED1: begin 
+            if(opt_cnt == 24'd1) begin 
+               main_state <= F_RESERVED2;
+               opt_cnt    <= 24'd0;
+            end 
+            else begin 
+               opt_cnt <= opt_cnt + 24'd1;
+            end 
+
+            bmp_reserved1[7:0]  <= bmp_data;
+            bmp_reserved1[15:8] <= bmp_reserved1[7:0];
+         end 
+         F_RESERVED2: begin 
+            if(opt_cnt == 24'd1) begin 
+               main_state <= F_OFFSETBITMAP;
+               opt_cnt    <= 24'd0;
+            end 
+            else begin 
+               opt_cnt <= opt_cnt + 24'd1;
+            end 
+
+            bmp_reserved2[7:0]  <= bmp_data;
+            bmp_reserved2[15:8] <= bmp_reserved2[7:0];
+         end 
+         F_OFFSETBITMAP: begin 
+            if(opt_cnt == 24'd3) begin 
+               main_state <= F_RESERVED1;
+               opt_cnt    <= 24'd0;
+            end 
+            else begin 
+               opt_cnt <= opt_cnt + 24'd1;
+            end 
+
+            bmp_bitmap_offset[7:0]  <= bmp_data;
+            bmp_bitmap_offset[31:8] <= bmp_bitmap_offset[27:0];
+         end 
+
+
+
+      endcase 
+   end 
+
+
+
+
+end 
+
+
+
+
+
+
+
+
+
+
+endmodule 
